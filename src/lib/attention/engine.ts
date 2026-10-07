@@ -82,7 +82,7 @@ class AttentionEngine {
       {
         baseOptions: {
           modelAssetPath: modelPath,
-          delegate: "GPU",
+          delegate: "CPU",
         },
         outputFaceBlendshapes: true,
         outputFacialTransformationMatrixes: true,

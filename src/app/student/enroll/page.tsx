@@ -90,7 +90,7 @@ export default function EnrollPage() {
         const landmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
           baseOptions: {
             modelAssetPath: modelPath,
-            delegate: "GPU",
+            delegate: "CPU",
           },
           outputFaceBlendshapes: false,
           outputFacialTransformationMatrixes: false,
