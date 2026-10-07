@@ -95,16 +95,18 @@ Copy-Item "node_modules/pdfjs-dist/build/pdf.worker.min.js" "public/pdf.worker.m
 cp node_modules/pdfjs-dist/build/pdf.worker.min.js public/pdf.worker.min.js
 ```
 
-### 5. Copy ONNX Runtime WASM files
+### 5. Copy ONNX Runtime browser runtime files
 
 ```powershell
 # Windows (PowerShell)
-Copy-Item "node_modules/onnxruntime-web/dist/*.wasm" "public/"
+Copy-Item "node_modules/onnxruntime-web/dist/ort-wasm-simd-threaded*.wasm" "public/"
+Copy-Item "node_modules/onnxruntime-web/dist/ort-wasm-simd-threaded*.mjs" "public/"
 ```
 
 ```bash
 # macOS / Linux
-cp node_modules/onnxruntime-web/dist/*.wasm public/
+cp node_modules/onnxruntime-web/dist/ort-wasm-simd-threaded*.wasm public/
+cp node_modules/onnxruntime-web/dist/ort-wasm-simd-threaded*.mjs public/
 ```
 
 ### 6. Download AI model files

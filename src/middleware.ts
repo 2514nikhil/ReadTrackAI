@@ -69,11 +69,11 @@ export const config = {
      * - _next/image   (Next.js image optimisation)
      * - favicon.ico
      * - Public static files with known extensions:
-     *     images, fonts, WASM binaries, task/onnx model files, JS workers
+    *     images, fonts, WASM binaries, task/onnx model files, JS workers, and modules
      *
      * This ensures the auth middleware never touches files that are fetched
      * directly by onnxruntime-web, pdfjs-dist, or MediaPipe.
      */
-    "/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|woff2?|ttf|wasm|task|onnx|js)$).*)",
+    "/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|woff2?|ttf|wasm|task|onnx|js|mjs)$).*)",
   ],
 };
