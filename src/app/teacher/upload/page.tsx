@@ -30,13 +30,15 @@ export default function UploadPage() {
   useEffect(() => {
     async function loadStudents() {
       const { data, error } = await supabase
-        .from("profiles")
-        .select("id, full_name")
-        .eq("role", "student")
-        .order("full_name");
+        .from("teacher_students")
+        .select("student_id, profiles!teacher_students_student_id_fkey(id, full_name)")
+        .order("created_at", { ascending: false });
 
       if (!error && data) {
-        setStudents(data);
+        setStudents(
+          data
+            .flatMap((row) => row.profiles ?? [])
+        );
       }
       setStudentsLoading(false);
     }

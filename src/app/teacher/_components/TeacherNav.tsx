@@ -16,6 +16,7 @@ export default function TeacherNav() {
 
   const links = [
     { href: "/teacher", label: "Dashboard" },
+    { href: "/teacher/students", label: "Students" },
     { href: "/teacher/upload", label: "Upload Document" },
   ];
 

@@ -63,6 +63,26 @@ export async function POST(request: NextRequest) {
   }
   const fileType = ext as "pdf" | "docx";
 
+  const studentIds = studentIdsRaw
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
+
+  if (studentIds.length > 0) {
+    const { data: roster, error: rosterError } = await supabase
+      .from("teacher_students")
+      .select("student_id")
+      .eq("teacher_id", user.id)
+      .in("student_id", studentIds);
+
+    if (rosterError || (roster?.length ?? 0) !== new Set(studentIds).size) {
+      return NextResponse.json(
+        { error: "You can only assign documents to students on your roster" },
+        { status: 403 }
+      );
+    }
+  }
+
   // 5. Upload to Supabase Storage using the service-role client
   const serviceSupabase = createServiceClient();
   const storagePath = `${user.id}/${randomUUID()}.${ext}`;
@@ -97,11 +117,6 @@ export async function POST(request: NextRequest) {
   }
 
   // 7. Insert assignments for each selected student
-  const studentIds = studentIdsRaw
-    .split(",")
-    .map((id) => id.trim())
-    .filter(Boolean);
-
   if (studentIds.length > 0) {
     const rows = studentIds.map((studentId) => ({
       document_id: doc.id,
