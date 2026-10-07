@@ -17,13 +17,22 @@ async function getTeacher() {
 
   if (!user) return { supabase, user: null };
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
     .maybeSingle();
 
-  return { supabase, user: profile?.role === "teacher" ? user : null };
+  if (profileError) {
+    console.error("Unable to load teacher profile", profileError);
+  }
+
+  const role =
+    profile?.role === "teacher" || profile?.role === "student"
+      ? profile.role
+      : user.user_metadata?.role;
+
+  return { supabase, user: role === "teacher" ? user : null };
 }
 
 export async function GET() {
@@ -64,6 +73,27 @@ export async function POST(request: NextRequest) {
   }
 
   const serviceSupabase = createServiceClient();
+  const { data: teacherProfile } = await serviceSupabase
+    .from("profiles")
+    .select("id")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (!teacherProfile) {
+    const { error: profileError } = await serviceSupabase.from("profiles").insert({
+      id: user.id,
+      full_name: user.user_metadata?.full_name ?? user.email ?? "Teacher",
+      role: "teacher",
+    });
+
+    if (profileError) {
+      return NextResponse.json(
+        { error: `Could not initialize teacher profile: ${profileError.message}` },
+        { status: 500 }
+      );
+    }
+  }
+
   const { data: users, error: usersError } = await serviceSupabase.auth.admin.listUsers({
     page: 1,
     perPage: 1000,
