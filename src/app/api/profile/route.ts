@@ -48,8 +48,20 @@ export async function GET() {
 
   const { profile, error } = await getOrCreateProfile(supabase, user);
 
-  if (error || !profile) {
-    return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+  if (error) {
+    const missingSchema = error.code === "PGRST205" || error.code === "42P01";
+    return NextResponse.json(
+      {
+        error: missingSchema
+          ? "Supabase database schema is missing. Run 001_initial.sql in the Supabase SQL Editor."
+          : `Profile lookup failed: ${error.message}`,
+      },
+      { status: 503 }
+    );
+  }
+
+  if (!profile) {
+    return NextResponse.json({ error: "Profile could not be initialized" }, { status: 500 });
   }
 
   return NextResponse.json({

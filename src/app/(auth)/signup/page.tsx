@@ -55,6 +55,7 @@ export default function SignupPage() {
           </label>
           <input
             type="text"
+            autoComplete="name"
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
@@ -69,6 +70,7 @@ export default function SignupPage() {
           </label>
           <input
             type="email"
+            autoComplete="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -83,6 +85,7 @@ export default function SignupPage() {
           </label>
           <input
             type="password"
+            autoComplete="new-password"
             required
             minLength={6}
             value={password}

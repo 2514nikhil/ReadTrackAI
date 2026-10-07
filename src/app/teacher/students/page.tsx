@@ -80,6 +80,7 @@ export default function TeacherStudentsPage() {
       <form onSubmit={addStudent} className="mb-6 flex max-w-xl gap-3 rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
         <input
           type="email"
+          autoComplete="email"
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
