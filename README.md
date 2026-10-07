@@ -70,14 +70,15 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 
 ### 3. Database migration
 
-In the **Supabase SQL Editor**, paste and run the entire contents of:
+In the **Supabase SQL Editor**, paste and run the entire contents of these files, in order:
 
 ```
 supabase/migrations/001_initial.sql
+supabase/migrations/002_teacher_students.sql
 ```
 
 This creates:
-- Tables: `profiles`, `documents`, `assignments`, `reading_sessions`
+- Tables: `profiles`, `documents`, `assignments`, `teacher_students`, `reading_sessions`
 - Row Level Security policies for all tables
 - An `on_auth_user_created` trigger that auto-populates `profiles`
 - The `documents` Storage bucket
@@ -162,8 +163,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 1. Sign up at `/signup` — choose **Teacher**
 2. Log in → redirected to `/teacher`
-3. Click **Upload Document** → upload a PDF or DOCX and assign it to students
-4. Click **View Report** on any document to see per-student reading time, a bar chart, and session history
+3. Open **Students** and add students by the email address on their existing ReadTrack account
+4. Click **Upload Document** → upload a PDF or DOCX and assign it to students on your roster
+5. Click **View Report** on any document to see per-student reading time, a bar chart, and session history
 
 ### As a Student
 
