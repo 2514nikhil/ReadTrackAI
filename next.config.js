@@ -1,9 +1,20 @@
+const path = require("path");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config) => {
     // pdfjs-dist tries to require 'canvas' in Node environments; alias it away
     // so webpack does not fail when bundling PDF-worker dependencies.
     config.resolve.alias.canvas = false;
+
+    // onnxruntime-web ships both browser and Node builds. Next.js/Vercel can
+    // accidentally bundle the Node variant during production builds, which breaks
+    // Terser parsing of ort.node.min.mjs. Force the browser bundle here.
+    config.resolve.alias["onnxruntime-web$"] = path.resolve(
+      __dirname,
+      "node_modules/onnxruntime-web/dist/ort.min.js"
+    );
+
     return config;
   },
 
