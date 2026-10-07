@@ -1,0 +1,29 @@
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+
+export default async function RootPage() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const role =
+    profile?.role === "teacher" || profile?.role === "student"
+      ? profile.role
+      : user.user_metadata?.role === "teacher"
+        ? "teacher"
+        : "student";
+
+  redirect(role === "teacher" ? "/teacher" : "/student");
+}
